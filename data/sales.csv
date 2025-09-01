@@ -1,0 +1,21 @@
+date,business_unit,region,client,quantity,unit_price,unit_cost
+2024-01-05,Cloud Services,Americas,Empresa A,15,1200,800
+2024-01-10,Advertising,Europe,Empresa B,8,5000,3000
+2024-01-12,Infrastructure,Asia,Empresa C,20,700,400
+2024-01-18,Artificial Intelligence,Americas,Empresa D,5,8000,5000
+2024-01-22,Cloud Services,Europe,Empresa E,12,1500,950
+2024-02-03,Advertising,Americas,Empresa F,10,5200,3200
+2024-02-08,Infrastructure,Asia,Empresa G,18,750,420
+2024-02-14,Cloud Services,Europe,Empresa H,25,1250,820
+2024-02-20,Artificial Intelligence,Americas,Empresa I,7,8200,5100
+2024-02-25,Advertising,Europe,Empresa J,15,4800,3100
+2024-03-02,Infrastructure,Americas,Empresa K,22,770,450
+2024-03-07,Cloud Services,Asia,Empresa L,30,1400,900
+2024-03-12,Advertising,Europe,Empresa M,18,5100,3050
+2024-03-15,Artificial Intelligence,Asia,Empresa N,6,8300,5200
+2024-03-20,Cloud Services,Americas,Empresa O,28,1350,880
+2024-03-25,Infrastructure,Europe,Empresa P,16,800,500
+2024-04-01,Advertising,Americas,Empresa Q,12,4950,3100
+2024-04-05,Artificial Intelligence,Europe,Empresa R,9,8100,5300
+2024-04-10,Cloud Services,Asia,Empresa S,20,1450,970
+2024-04-15,Infrastructure,Americas,Empresa T,18,780,460

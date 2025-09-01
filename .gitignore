@@ -1,0 +1,20 @@
+# Ambiente virtual
+venv/
+.env/
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Saídas do projeto
+output/
+*.csv
+*.png
+*.pdf
+
+# Mas manter o dataset de exemplo
+!data/sales.csv
+
+# Configurações locais do editor
+.vscode/
+.idea/
