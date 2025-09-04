@@ -1,66 +1,63 @@
-import os
+from reportlab.platypus import SimpleDocTemplate
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfgen import canvas
 from reportlab.lib.units import cm
-from reportlab.lib.utils import ImageReader
+import os
 
-def create_financial_report(kpis_text: str, graphs: list, save_path: str = "output/report/financial_report.pdf"):
+# Importando módulos separados
+from .sections.cover import build_cover
+from .sections.kpis import build_kpis
+from .sections.graphs import build_graphs
+from .sections.conclusion import build_conclusion
+from .utils.header_footer import HeaderFooter
+
+def create_financial_report(kpis_dict, graphs, save_path="output/report/financial_report.pdf"):
     """
-    Cria um PDF com os KPIs e gráficos da análise financeira, com layout organizado.
-
-    Args:
-        kpis_text (str): Texto com os KPIs calculados.
-        graphs (list): Lista de paths para os gráficos PNG.
-        save_path (str): Caminho do arquivo PDF a ser gerado.
+    Cria um relatório financeiro corporativo em PDF, com capa, KPIs, gráficos e conclusão.
     """
-    os.makedirs(os.path.dirname(save_path), exist_ok=True)
-    c = canvas.Canvas(save_path, pagesize=A4)
-    width, height = A4
+    # Cria a pasta de saída caso não exista
+    if os.path.exists(save_path):
+         print(f"Exportação não realizada, arquivo já existe: {save_path}")
+    else:
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
 
-    # Configuração de margens
-    left_margin, right_margin, top_margin, bottom_margin = 2*cm, 2*cm, 2*cm, 2*cm
-    available_width = width - left_margin - right_margin
-    y_pos = height - top_margin
+        # Configuração do documento
+        doc = SimpleDocTemplate(
+            save_path,
+            pagesize=A4,
+            rightMargin=2*cm,
+            leftMargin=2*cm,
+            topMargin=3.5*cm,
+            bottomMargin=2.5*cm
+        )
 
-    # Adiciona título
-    c.setFont("Helvetica-Bold", 16)
-    c.drawCentredString(width/2, y_pos, "Relatório Financeiro")
-    y_pos -= 1.5*cm
+        story = []  # Lista que armazenará os elementos do PDF
+        width, height = A4
 
-    # Adiciona KPIs (quebra de linha automática)
-    text_obj = c.beginText(left_margin, y_pos)
-    text_obj.setFont("Helvetica", 11)
-    line_height = 14  # px aproximado
-    for line in kpis_text.split("\n"):
-        if y_pos - line_height < bottom_margin:
-            # Nova página
-            c.drawText(text_obj)
-            c.showPage()
-            y_pos = height - top_margin
-            text_obj = c.beginText(left_margin, y_pos)
-            text_obj.setFont("Helvetica", 11)
-        text_obj.textLine(line)
-        y_pos -= line_height
-    c.drawText(text_obj)
-    y_pos -= 1*cm  # espaço após KPIs
+        # ====== CAPA ======
+        draw_cover_func = build_cover(story, width, height)
 
-    # Adiciona gráficos
-    max_graph_height = 8*cm
-    for graph_path in graphs:
-        if os.path.exists(graph_path):
-            # Se não houver espaço, cria nova página
-            if y_pos - max_graph_height < bottom_margin:
-                c.showPage()
-                y_pos = height - top_margin
+        # ====== SEÇÃO KPIs ======
+        build_kpis(story, kpis_dict)
 
-            img = ImageReader(graph_path)
-            c.drawImage(img, left_margin, y_pos - max_graph_height,
-                        width=available_width, height=max_graph_height,
-                        preserveAspectRatio=True, anchor='n')
+        # ====== SEÇÃO GRÁFICOS ======
+        build_graphs(story, graphs)
 
-            y_pos -= max_graph_height + 1*cm  # espaço entre gráficos
-        else:
-            print(f"⚠ Gráfico não encontrado: {graph_path}")
+        # ====== CONCLUSÃO ======
+        build_conclusion(
+            story,
+            "O relatório demonstra crescimento estável da receita e aumento gradual da margem operacional. "
+            "Sugere-se intensificar investimentos em inovação e expandir para novos mercados estratégicos."
+        )
 
-    c.save()
-    print(f"✅ Relatório PDF gerado em: {save_path}")
+        # ====== Cabeçalho e Rodapé ======
+        def on_page(canvas, doc_ref):
+            HeaderFooter(canvas, doc_ref).draw()
+
+        # ====== Construção final do PDF ======
+        doc.build(
+            story,
+            onFirstPage=draw_cover_func,  # Capa personalizada
+            onLaterPages=on_page          # Cabeçalho/rodapé nas demais páginas
+        )
+
+        print(f"✅ Relatório PDF gerado em: {save_path}")

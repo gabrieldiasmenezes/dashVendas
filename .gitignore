@@ -1,20 +1,39 @@
-# Ambiente virtual
+# Ambiente/segredos
 venv/
 .env/
 
 # Cache do Python
 __pycache__/
-*.pyc
+*.py[cod]
 
-# Saídas do projeto
-output/
+# Build/dist
+build/
+dist/
+*.egg-info/
+
+# Configs de editor
+.vscode/
+.idea/
+
+# >>> Manter a estrutura de output <<<
+output/**
+!output/
+!output/.gitkeep
+!output/csv
+!output/csv/.gitkeep
+!output/graph/
+!output/graph/.gitkeep
+!output/report/
+!output/report/.gitkeep
+
+# >>> Arquivos gerados em QUALQUER pasta (CSV/PNG/PDF) <<<
 *.csv
 *.png
 *.pdf
 
-# Mas manter o dataset de exemplo
+# ÚNICA exceção: dataset base
 !data/sales.csv
 
-# Configurações locais do editor
-.vscode/
-.idea/
+# Lixo de SO
+.DS_Store
+Thumbs.db

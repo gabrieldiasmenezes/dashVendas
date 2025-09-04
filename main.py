@@ -42,7 +42,7 @@ try:
         df_clean=clean_sales_data(df)
 
         #Calculos dos KPIs
-        df_profit,kpis_text=calculate_profit(df_clean)
+        df_profit,kpis_dict=calculate_profit(df_clean)
 
         #Agregações
         monthly_profit=aggregate_by_month(df_profit)
@@ -90,6 +90,6 @@ try:
             "output/graph/top_bottom_unit.png",
             "output/graph/heatmap_unit_region.png"
         ]
-        create_financial_report(kpis_text,graphs,save_path="output/report/financial_report.pdf")
+        create_financial_report(kpis_dict,graphs,save_path="output/report/financial_report.pdf")
 except Exception as e:
     print(f"Erro: {e}")
